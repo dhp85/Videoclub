@@ -1,5 +1,5 @@
 import csv
-
+"""
 fichero = open("data/directores.csv", "r", newline="")
 
 lector_csv = csv.reader(fichero, delimiter=";", quotechar="'")
@@ -17,4 +17,11 @@ for registro in lector_csv:
     print(registro)
 
 
-fichero.close()    
+fichero.close() 
+"""   
+
+
+with open("data/grupos_zoo.csv", "r", newline='') as fichero:
+    lector = csv.DictReader(fichero)
+    for fila in lector:
+        print(fila)
