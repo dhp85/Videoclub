@@ -52,7 +52,7 @@ def test_dao_peliculas_traer_todos():
     peliculas = dao.todos()
 
     assert len(peliculas) == 5
-    assert peliculas[4] == Pelicula("Psicosis", "Sinopsis pelicula", 3, 24)
+    assert peliculas[4] == Pelicula("Psicosis", "Una joven secretaria, tras cometer un robo, se marcha de la ciudad y conduce durante horas, parando para descansar en un pequeño motel de carretera regentado por un joven llamado Norman. Todo parece normal y tranquilo en el apartado motel y en la casa de al lado en la que viven Norman y su madre pero, mientras está en la ducha, la joven es asesinada salvajemente a cuchilladas.", 3, 24)
 
 
 
