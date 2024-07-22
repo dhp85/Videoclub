@@ -1,4 +1,5 @@
-from app.modelos import Director, DAO_CSV_Director, Pelicula, DAO_CSV_Pelicula, Genero, DAO_CSV_Genero
+from app.modelos import Director, Pelicula, Genero, Copias
+from app.daos import DAO_CSV_Copias, DAO_CSV_Director, DAO_CSV_Genero, DAO_CSV_Pelicula
 
 def test_create_director():
     director = Director("Robert Redford")
@@ -70,4 +71,12 @@ def test_dao_generos_traer_todos():
     assert generos[0] == Genero("Accion",1)
 
 
- 
+def test_create_copia():
+    copia = Copias(1,1)
+
+    assert copia.id == 1
+    assert copia.id_pelicula == 1
+
+def test_dao_copias_traer_todos():
+    dao = DAO_CSV_Copias("tests/data/copias_1.csv")
+    copias = dao.todos()

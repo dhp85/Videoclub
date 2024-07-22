@@ -89,50 +89,21 @@ class Genero(Model):
         return hash((self.id, self.genero))
 
 class Copias(Model):
-    pass
+    @classmethod
+    def create_from_dict(cls, diccionario):
+            return cls(int(diccionario["id"]), int(diccionario["id_pelicula"]))
 
-class DAO(ABC):
-    """
-    @abstractmethod
-    def guardar(self, instancia):
-        pass
-    
-    @abstractmethod
-    def actualizar(self, instancia):
-        pass
-    
-    @abstractmethod
-    def borrar(self, id: int):
-        pass
-    
-    @abstractmethod
-    def consultar(self, id: int):
-        pass
-    """
+    def __init__(self, id_pelicula: int, id: int = -1 ):
+        self.id_pelicula = id_pelicula 
+        self.id = id
 
-    @abstractmethod
-    def todos(self):
-        pass
+    def __repr__(self) -> str:
+        return f"Genero ({self.id}): {self.id_pelicula}"
 
-class DAO_CSV(DAO):
-    model = None
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, self.__class__):
+            return self.id_pelicula == other.id_pelicula and self.id == other.id
+        return False
 
-    def __init__(self, path):
-        self.path = path
-
-    def todos(self):
-        with open(self.path, "r", newline="", encoding="utf-8") as fichero:
-            lector_csv = csv.DictReader(fichero, delimiter=";", quotechar="'")
-            lista = []
-            for registro in lector_csv:
-                lista.append(self.model.create_from_dict(registro))
-        return lista     
-
-class DAO_CSV_Director(DAO_CSV):
-    model = Director
-
-class DAO_CSV_Pelicula(DAO_CSV):
-    model = Pelicula
-
-class DAO_CSV_Genero(DAO_CSV):
-    model = Genero    
+    def __hash__(self):
+        return hash((self.id, self.id_pelicula))
