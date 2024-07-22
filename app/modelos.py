@@ -31,24 +31,16 @@ class Director(Model):
 class Pelicula(Model):
     @classmethod
     def create_from_dict(cls, diccionario):
-        return cls(diccionario["titulo"], diccionario["sinopsis"], int(diccionario["director_id"]), int(diccionario["id"]))
+        return cls(diccionario["titulo"], 
+                   diccionario["sinopsis"], 
+                   int(diccionario["director_id"]), 
+                   int(diccionario["id"]))
     
-    def __init__(self, titulo: str, sinopsis: str, director: object, id=-1):
+    def __init__(self, titulo: str, sinopsis: str, director: object, id = -1):
         self.titulo = titulo
         self.sinopsis = sinopsis
         self.id = id
         self.director = director
-
-    def __repr__(self) -> str:
-            return f"Pelicula ({self.titulo}): {self.sinopsis}, {self.director}, {self.id}"
-    
-    def __eq__(self, other: object) -> bool:
-        if isinstance(other, self.__class__):
-            return self.titulo == other.titulo and self.sinopsis == other.sinopsis and self.director == other.director and self.id == other.id
-        return False
-    
-    def __hash__(self):
-        return hash((self.id, self.titulo, self.sinopsis, self.director))    
                 
     @property
     def director(self):
@@ -65,51 +57,82 @@ class Pelicula(Model):
         else:
             raise TypeError(f"{value} debe ser un entero o instancia de Director")
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.titulo == other.titulo and self.sinopsis == other.sinopsis and self.director == other.director and self.id == other.id
+        return False
+    
+    def __hash__(self):
+        return hash((self.id, self.titulo, self.sinopsis, self.director))
+    
+    def __repr__(self):
+        return f"Pelicula ({self.id}): {self.titulo}, {self.director}"
+    
+class Genero(Model):
+    @classmethod
+    def create_from_dict(cls, diccionario):
+            return cls(diccionario["genero"], int(diccionario["id"]))
 
-class Dao(ABC):
+    def __init__(self, genero: str, id: int = -1):
+        self.genero = genero
+        self.id = id
+
+    def __repr__(self) -> str:
+        return f"Genero ({self.id}): {self.genero}"
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, self.__class__):
+            return self.genero == other.genero and self.id == other.id
+        return False
+
+    def __hash__(self):
+        return hash((self.id, self.genero))
+
+class Copias(Model):
+    pass
+
+class DAO(ABC):
     """
     @abstractmethod
     def guardar(self, instancia):
         pass
     
     @abstractmethod
-    def actualizar(self, intancia):
+    def actualizar(self, instancia):
         pass
     
     @abstractmethod
     def borrar(self, id: int):
         pass
-
+    
     @abstractmethod
     def consultar(self, id: int):
         pass
     """
+
     @abstractmethod
     def todos(self):
         pass
 
-class DaoCsv(Dao):
-        model = None
+class DAO_CSV(DAO):
+    model = None
 
-        def __init__(self, path):
-         self.path = path
-         
+    def __init__(self, path):
+        self.path = path
 
-        def todos(self):
-                with open(self.path, "r", newline="") as fichero:
-                    lector_csv = csv.DictReader(fichero, delimiter=";", quotechar="'")
-                    lista = []
-                    for registro in lector_csv:
-                        lista.append(self.model.create_from_dict(registro))
-                return lista 
+    def todos(self):
+        with open(self.path, "r", newline="", encoding="utf-8") as fichero:
+            lector_csv = csv.DictReader(fichero, delimiter=";", quotechar="'")
+            lista = []
+            for registro in lector_csv:
+                lista.append(self.model.create_from_dict(registro))
+        return lista     
 
-
-
-class DaoCsvDirector(DaoCsv):
+class DAO_CSV_Director(DAO_CSV):
     model = Director
 
-        
- 
-    
-class DaoCsvPelicula(DaoCsv):
+class DAO_CSV_Pelicula(DAO_CSV):
     model = Pelicula
+
+class DAO_CSV_Genero(DAO_CSV):
+    model = Genero    

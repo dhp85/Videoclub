@@ -1,4 +1,4 @@
-from app.modelos import Director, DaoCsvDirector, Pelicula, DaoCsvPelicula
+from app.modelos import Director, DAO_CSV_Director, Pelicula, DAO_CSV_Pelicula, Genero, DAO_CSV_Genero
 
 def test_create_director():
     director = Director("Robert Redford")
@@ -8,7 +8,7 @@ def test_create_director():
 
 
 def test_dao_directores_traer_todos():
-    dao = DaoCsvDirector("tests/data/directores.csv")
+    dao = DAO_CSV_Director("tests/data/directores.csv")
     directores = dao.todos()
 
     assert len(directores) == 8
@@ -48,13 +48,26 @@ def test_asigna_director_a_pelicula():
     assert pelicula._id_director == 9
 
 def test_dao_peliculas_traer_todos():
-    dao = DaoCsvPelicula("tests/data/peliculas-2.csv")
+    dao = DAO_CSV_Pelicula("tests/data/peliculas.csv")
     peliculas = dao.todos()
 
     assert len(peliculas) == 5
-    assert peliculas[4] == Pelicula("Psicosis", "Una joven secretaria, tras cometer un robo, se marcha de la ciudad y conduce durante horas, parando para descansar en un pequeño motel de carretera regentado por un joven llamado Norman. Todo parece normal y tranquilo en el apartado motel y en la casa de al lado en la que viven Norman y su madre pero, mientras está en la ducha, la joven es asesinada salvajemente a cuchilladas.", 3, 24)
+
+    assert peliculas[1] == Pelicula("Los siete samuráis", "Una banda de forajidos atemorizan a los habitantes de un pequeño pueblo, saqueándolos periódicamente sin piedad. Para repeler estos ataques, los aldeanos deciden contratar a mercenarios. Finalmente, consiguen los servicios de 7 guerreros, 7 samurais dispuestos a defenderlos a cambio, tan solo, de cobijo y comida.", 2, 17 )
+
+def test_create_genero():
+    genero = Genero("Terror")
+
+    assert genero.genero == "Terror"
+    assert genero.id == -1
 
 
+def test_dao_generos_traer_todos():
+    dao = DAO_CSV_Genero("tests/data/generos.csv")
+    generos = dao.todos()
+
+    assert len(generos) == 13
+    assert generos[0] == Genero("Accion",1)
 
 
  
