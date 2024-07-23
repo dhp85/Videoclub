@@ -1,5 +1,5 @@
 from app.modelos import Director, Pelicula, Genero, Copias
-from app.daos import DAO_CSV_Copias, DAO_CSV_Director, DAO_CSV_Genero, DAO_CSV_Pelicula
+from app.daos import DAO_CSV_Copias, DAO_CSV_Director, DAO_CSV_Genero, DAO_CSV_Pelicula, DAO_SQLite_Director
 
 def test_create_director():
     director = Director("Robert Redford")
@@ -80,3 +80,11 @@ def test_create_copia():
 def test_dao_copias_traer_todos():
     dao = DAO_CSV_Copias("tests/data/copias_1.csv")
     copias = dao.todos()
+
+def test_dao_directores_sqlite_traer_todos():
+    dao = DAO_SQLite_Director("data/films.sqlite")
+
+    directores = dao.todos()
+
+    assert len(directores) == 76
+    assert directores[7] == Director("Charlie Chaplin", 8)

@@ -9,5 +9,4 @@ descripcion = ('id','Nombre', 'url_foto', 'url_web')
 
 # Iterar sobre la lista de tuplas
 for item in result:
-    d = dict(zip(descripcion, item))
-    print(d)
+    print(item)

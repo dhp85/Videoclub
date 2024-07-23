@@ -89,6 +89,7 @@ class Genero(Model):
         return hash((self.id, self.genero))
 
 class Copias(Model):
+
     @classmethod
     def create_from_dict(cls, diccionario):
             return cls(int(diccionario["id"]), int(diccionario["id_pelicula"]))
@@ -107,3 +108,6 @@ class Copias(Model):
 
     def __hash__(self):
         return hash((self.id, self.id_pelicula))
+    
+
+ 

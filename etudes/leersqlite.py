@@ -1,40 +1,45 @@
 import sqlite3
 
-# Abrir conexion
+def rows_to_dictlist(filas, nombres):
+    registros = []
+    for fila in filas:
+        registro = {}
+        pos = 0
+        for nombre in nombres:
+            registro[nombre] = fila[pos]
+            pos += 1
 
+        """
+        for pos, nombre in enumerate(nombres):
+            registro[nombre] = fila[pos]
+        """
+        registros.append(registro)
+    return registros
+
+# Abrir conexion
 con = sqlite3.connect("data/peliculas.sqlite")
 
-# Crear cusor
+# Crear cursor 
 cur = con.cursor()
 
-cur.execute("select id, nombre, url_foto, url_web from directores")
+# Uso el cursos con sql en forma de cadena
+cur.execute("select id, nombre, url_foto from directores where url_foto is not NULL")
 
 columns_description = cur.description
+nombres_columna = []
+for columna in columns_description:
+    nombres_columna.append(columna[0])
+
+nombres_columna = list(map(lambda item: item[0], columns_description))
 
 # Proceso la respuesta si la hubiera (un select)
+rows = cur.fetchall()
 
-result = cur.fetchall()
+# hacer una funcion que me transforme la lista de tuplas result, en una lista de diccionarios como la que devuelve el dict reader
 
+resultado = rows_to_dictlist(rows, nombres_columna)
 
+print(resultado)
 
-# hacer una funcion que me transforme la lista de tuplas result, en una lista de diccionarios como la que duvuelve el dict reader.
-
-def transformar_en_diccionario(result):
-
-# Claves:
-    descripcion = ('id','Nombre', 'url_foto', 'url_web')
-    lista = []
-
-# Iterar sobre la lista de tuplas, crear diccionarios por iteracion y añadir a lista.
-    for item in result:
-        d = dict(zip(descripcion, item))
-        lista.append(d)
-        
-    return lista
-
-print(transformar_en_diccionario(result))
- 
-
-#Cerrar  la consexion siempre
-
+# Cerrar la conexion siempre
 con.close()
