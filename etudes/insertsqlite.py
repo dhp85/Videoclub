@@ -9,7 +9,13 @@ foto = input("Urll afoto: ")
 web = input("url web: ")
 
 
-cur.execute(f"INSERT INTO directores (nombre,url_foto, url_web) values ('{nombre}', '{foto}', '{web}')")
+query = f"INSERT INTO directores (nombre, url_foto, url_web) values ('{nombre}', '{foto}', '{web}')"
+
+print(query)
+
+cur.execute(query)
+
+con.commit()
 
 
 con.close()
