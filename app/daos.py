@@ -88,13 +88,13 @@ class DAO_SQLite(DAO):
 
 
 
-
-
-
 class DAO_SQLite_Director(DAO_SQLite):
     model = Director
     tabla = "directores"
 
+class DAO_SQLite_Pelicula(DAO_SQLite):
+    model = Pelicula
+    tabla = "peliculas"
 
 class DAO_CSV_Director(DAO_CSV):
     model = Director
