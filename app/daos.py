@@ -60,18 +60,17 @@ class DAO_SQLite(DAO):
         
         nombres = list(map(lambda item: item[0], cur.description))
 
-        lista = self.__rows_to_dictlist(cur.fetchall(), nombres)
-        resultado = []
+        lista = self.__rows_to_model(cur.fetchall(), nombres)
+        
         # Evitar este segundo bucle (es segundo porque el primero está en la linea 136) haciendo que
         # rows_to_dicc... devuelva una lista de Modelos y no una lista de diccionarios
-        for registro in lista:
-            resultado.append(self.model.create_from_dict(registro))
+   
 
         conn.close()
 
-        return resultado
+        return lista
 
-    def __rows_to_dictlist(self, filas, nombres):
+    def __rows_to_model(self, filas, nombres):
         registros = []
         for fila in filas:
             registro = {}
@@ -84,7 +83,7 @@ class DAO_SQLite(DAO):
             for pos, nombre in enumerate(nombres):
                 registro[nombre] = fila[pos]
             """
-            registros.append(registro)
+            registros.append(self.model.create_from_dict(registro))
         return registros
 
 
